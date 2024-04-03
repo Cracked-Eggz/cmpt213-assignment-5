@@ -1,4 +1,4 @@
-package Model;
+package CoursePlanner.Model;
 
 public class Class {
     private int enrollCap;

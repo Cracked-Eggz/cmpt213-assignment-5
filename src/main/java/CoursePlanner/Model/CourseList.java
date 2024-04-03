@@ -1,4 +1,4 @@
-package Model;
+package CoursePlanner.Model;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

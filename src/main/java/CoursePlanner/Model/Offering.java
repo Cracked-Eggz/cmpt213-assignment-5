@@ -1,4 +1,4 @@
-package Model;
+package CoursePlanner.Model;
 
 import java.util.ArrayList;
 import java.util.Collections;
