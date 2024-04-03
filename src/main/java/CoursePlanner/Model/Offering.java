@@ -10,6 +10,7 @@ public class Offering {
     private List<String> instructors;
     private List<Class> classes;
 
+
     public Offering(String[] courseDetails) {
         this.classes = new ArrayList<>();
         for (String dataCol: courseDetails) {
@@ -23,23 +24,48 @@ public class Offering {
         this.instructors = Collections.singletonList(courseDetails[6]);
     }
 
-    public void merge(Offering offering){
-        for (String instructor : instructors) {
-            offering.getInstructors().removeIf(instructor::equals);
-        }
-        instructors.addAll(offering.getInstructors());
+//    public void merge(Offering offering){
+//        for (String instructor : instructors) {
+//            offering.getInstructors().removeIf(instructor::equals);
+//        }
+//        instructors.addAll(offering.getInstructors());
+//
+//        for (Class aClass : classes) {
+//            for (Class newClass : offering.getClasses()) {
+//                if (aClass.equals(newClass)) {
+//                    aClass.merge(newClass);
+//                    offering.getClasses().remove(newClass);
+//                }
+//            }
+//        }
+//        classes.addAll(offering.getClasses());
+//    }
+    public void merge(Offering offering) {
+        List<String> instructorsToRemove = new ArrayList<>();
 
-        for (Class aClass : classes) {
-            for (Class newClass : offering.getClasses()) {
+        for (String instructor : this.instructors) {
+            if (offering.getInstructors().contains(instructor)) {
+                instructorsToRemove.add(instructor);
+            }
+        }
+        offering.getInstructors().removeAll(instructorsToRemove);
+
+        List<Class> classesToRemove = new ArrayList<>();
+        for (Class newClass : offering.getClasses()) {
+            for (Class aClass : this.classes) {
                 if (aClass.equals(newClass)) {
                     aClass.merge(newClass);
-                    offering.getClasses().remove(newClass);
+                    classesToRemove.add(newClass);
+                    break;
                 }
             }
         }
-        classes.addAll(offering.getClasses());
-    }
 
+        offering.getClasses().removeAll(classesToRemove);
+        this.classes.addAll(offering.getClasses());
+
+
+    }
     public String getLocation() {
         return location;
     }

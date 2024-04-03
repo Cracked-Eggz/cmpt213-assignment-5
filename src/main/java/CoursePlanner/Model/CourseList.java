@@ -14,6 +14,7 @@ public class CourseList {
         this.courses = new ArrayList<>();
         String courseStr;
         try (BufferedReader br = new BufferedReader(new FileReader(csvFileName))) {
+            br.readLine(); // To skip reading the headers
             while ((courseStr = br.readLine()) != null) {
                 String[] courseDetails = courseStr.split(",");
                 Course newCourse = new Course(courseDetails);
@@ -37,7 +38,7 @@ public class CourseList {
 
     // hard-coded factory method for course_data_2018.csv
     public static CourseList createTEST() {
-        return new CourseList("../data/course_data_2018.csv");
+        return new CourseList("data/course_data_2018.csv");
     }
 
     public void printAllCourses() {
