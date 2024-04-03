@@ -21,7 +21,6 @@ public class Course {
         this.subject = courseDetails[1];
         this.catalogNumber = courseDetails[2];
         offerings.add(new Offering(courseDetails));
-        Collections.sort(courses, (c1, c2) -> c1.getSubject().compareToIgnoreCase(c2.getSubject()));
     }
 
     public String getSubject() {
