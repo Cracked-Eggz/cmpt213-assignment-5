@@ -1,9 +1,7 @@
 package CoursePlanner.Model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Offering {
     private final int semester;
@@ -14,46 +12,44 @@ public class Offering {
 
     public Offering(String[] courseDetails) {
         this.classes = new ArrayList<>();
+        this.instructors = new ArrayList<>();
         for (String dataCol: courseDetails) {
             if (dataCol == null) {
                 System.out.print("Incorrect array size in Course(String[] courseDetails){...}");
                 System.exit(1); // abnormal status
             }
         }
+
         this.semester = Integer.parseInt(courseDetails[0]);
         this.location = courseDetails[3];
-        //this.instructors = Collections.singletonList(courseDetails[6]);
-        this.instructors = new ArrayList<>(Arrays.asList(courseDetails[6]));
-
-
+        instructors.add(courseDetails[6]);
+        classes.add(new Class(courseDetails));
     }
 
-    public void merge(Offering offering) {
-        List<String> instructorsToRemove = new ArrayList<>();
-
-        for (String instructor : this.instructors) {
-            if (offering.getInstructors().contains(instructor)) {
-                instructorsToRemove.add(instructor);
-            }
+public void merge(Offering offering) {
+    for (String instructor : offering.getInstructors()) {
+        if (!this.instructors.contains(instructor)) {
+            this.instructors.add(instructor);
         }
-        offering.getInstructors().removeAll(instructorsToRemove);
-
-        List<Class> classesToRemove = new ArrayList<>();
-        for (Class newClass : offering.getClasses()) {
-            for (Class aClass : this.classes) {
-                if (aClass.equals(newClass)) {
-                    aClass.merge(newClass);
-                    classesToRemove.add(newClass);
-                    break;
-                }
-            }
-        }
-
-        offering.getClasses().removeAll(classesToRemove);
-        this.classes.addAll(offering.getClasses());
-
-
     }
+    List<Class> classesToAdd = new ArrayList<>();
+    for (Class newClass : offering.getClasses()) {
+        boolean exists = false;
+        for (Class aClass : this.classes) {
+            if (aClass.equals(newClass)) {
+                aClass.merge(newClass);
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            classesToAdd.add(newClass);
+        }
+    }
+    this.classes.addAll(classesToAdd);
+}
+
+
     public String getLocation() {
         return location;
     }
@@ -67,8 +63,11 @@ public class Offering {
     }
 
     public void print() {
-
-
+        System.out.println("    "+ semester + " in " + location + " by " + String.join(", ",instructors));
+        assert !classes.isEmpty();
+        for(Class aclass: classes) {
+            aclass.print();
+        }
     }
 
     @Override

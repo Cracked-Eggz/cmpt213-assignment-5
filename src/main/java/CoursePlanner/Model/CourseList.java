@@ -2,6 +2,7 @@ package CoursePlanner.Model;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,6 +18,11 @@ public class CourseList {
             br.readLine(); // To skip reading the headers
             while ((courseStr = br.readLine()) != null) {
                 String[] courseDetails = courseStr.split(",");
+
+                for (int i = 0; i < courseDetails.length; i++) {
+                    courseDetails[i] = courseDetails[i].trim();
+                }
+
                 Course newCourse = new Course(courseDetails);
 
                 boolean merged = false;
@@ -33,6 +39,8 @@ public class CourseList {
                     courses.add(newCourse);
                 }
             }
+            Collections.sort(courses, (c1, c2) -> c1.getSubject().compareToIgnoreCase(c2.getSubject()));
+
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + csvFileName);
         } catch (IOException e) {

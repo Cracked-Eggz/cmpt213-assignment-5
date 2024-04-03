@@ -34,6 +34,9 @@ public class Class {
         this.enrollTotal += aClass.getEnrollTotal();
     }
 
+    public void print() {
+        System.out.println("        Type=" + componentCode + ", Enrollment=" + enrollTotal + "/" + enrollCap);
+    }
     @Override
     public boolean equals(Object aClass) {
         if (!(aClass instanceof Class)) {
