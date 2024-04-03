@@ -19,13 +19,19 @@ public class CourseList {
                 String[] courseDetails = courseStr.split(",");
                 Course newCourse = new Course(courseDetails);
 
+                boolean merged = false;
+
                 for (Course course : courses) {
                     if (course.equals(newCourse)) {
                         course.merge(newCourse);
-                        return;
+                        merged = true;
+                        break;
                     }
                 }
-                courses.add(newCourse);
+
+                if(!merged) {
+                    courses.add(newCourse);
+                }
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + csvFileName);
@@ -39,6 +45,7 @@ public class CourseList {
     // hard-coded factory method for course_data_2018.csv
     public static CourseList createTEST() {
         return new CourseList("data/course_data_2018.csv");
+        //return new CourseList("data/small_data.csv");
     }
 
     public void printAllCourses() {
@@ -46,4 +53,7 @@ public class CourseList {
             course.print();
         }
     }
+
+
+
 }

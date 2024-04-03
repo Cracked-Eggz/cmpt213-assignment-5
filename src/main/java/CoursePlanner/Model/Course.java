@@ -19,8 +19,6 @@ public class Course {
         }
         this.subject = courseDetails[1];
         this.catalogNumber = courseDetails[2];
-
-        //this.catalogNumber = Integer.parseInt(courseDetails[2]);
         offerings.add(new Offering(courseDetails));
     }
 
@@ -35,18 +33,6 @@ public class Course {
     public List<Offering> getOfferings() {
         return offerings;
     }
-
-//    public void merge(Course course)  {
-//        for (Offering offering : offerings) {
-//            for (Offering newOffering : course.getOfferings()) {
-//                if (offering.equals(newOffering)) {
-//                    offering.merge(newOffering);
-//                    course.getOfferings().remove(newOffering);
-//                }
-//            }
-//        }
-//        offerings.addAll(course.getOfferings());
-//    }
 
     public void merge(Course course) {
         List<Offering> offeringsToRemove = new ArrayList<>();

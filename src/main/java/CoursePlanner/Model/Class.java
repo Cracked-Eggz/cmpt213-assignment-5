@@ -42,4 +42,5 @@ public class Class {
             return getComponentCode().equals(((Class) aClass).getComponentCode());
         }
     }
+
 }
