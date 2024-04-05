@@ -1,5 +1,6 @@
 package CoursePlanner.Model;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ public class Offering {
     public Offering(String[] courseDetails) {
         this.classes = new ArrayList<>();
         this.instructors = new ArrayList<>();
-        for (String dataCol: courseDetails) {
+        for (String dataCol : courseDetails) {
             if (dataCol == null) {
                 System.out.print("Incorrect array size in Course(String[] courseDetails){...}");
                 System.exit(1); // abnormal status
@@ -25,28 +26,33 @@ public class Offering {
         classes.add(new Class(courseDetails));
     }
 
-public void merge(Offering offering) {
-    for (String instructor : offering.getInstructors()) {
-        if (!this.instructors.contains(instructor)) {
-            this.instructors.add(instructor);
-        }
-    }
-    List<Class> classesToAdd = new ArrayList<>();
-    for (Class newClass : offering.getClasses()) {
-        boolean exists = false;
-        for (Class aClass : this.classes) {
-            if (aClass.equals(newClass)) {
-                aClass.merge(newClass);
-                exists = true;
-                break;
+    public void merge(Offering offering) {
+        for (String instructor : offering.getInstructors()) {
+            if (!instructors.contains(instructor)) {
+                instructors.add(instructor);
             }
         }
-        if (!exists) {
-            classesToAdd.add(newClass);
+        List<Class> classesToAdd = new ArrayList<>();
+        for (Class newClass : offering.getClasses()) {
+            boolean exists = false;
+            for (Class aClass : classes) {
+                if (aClass.equals(newClass)) {
+                    aClass.merge(newClass);
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                classesToAdd.add(newClass);
+            }
         }
+        classes.addAll(classesToAdd);
+        classes.sort(Comparator.comparing(Class::getComponentCode));
     }
-    this.classes.addAll(classesToAdd);
-}
+
+    public int getSemester() {
+        return semester;
+    }
 
     public String getLocation() {
         return location;
@@ -63,7 +69,7 @@ public void merge(Offering offering) {
     public void print() {
         System.out.printf("%8s in %s by %s%n", semester, location, String.join(", ", instructors));
         assert !classes.isEmpty();
-        for(Class aclass: classes) {
+        for (Class aclass : classes) {
             aclass.print();
         }
     }
@@ -71,6 +77,8 @@ public void merge(Offering offering) {
     @Override
     public boolean equals(Object offering) {
         if (!(offering instanceof Offering)) {
+            return false;
+        } else if (semester != ((Offering) offering).getSemester()) {
             return false;
         } else {
             return location.equals(((Offering) offering).getLocation());

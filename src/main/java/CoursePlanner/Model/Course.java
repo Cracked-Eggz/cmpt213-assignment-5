@@ -48,6 +48,7 @@ public class Course {
         }
         course.getOfferings().removeAll(offeringsToRemove);
         offerings.addAll(course.getOfferings());
+        offerings.sort(Comparator.comparingInt(Offering::getSemester));
     }
 
     public void print() {
