@@ -37,6 +37,7 @@ public class Class {
     public void print() {
         System.out.println("        Type=" + componentCode + ", Enrollment=" + enrollTotal + "/" + enrollCap);
     }
+
     @Override
     public boolean equals(Object aClass) {
         if (!(aClass instanceof Class)) {
@@ -45,5 +46,4 @@ public class Class {
             return getComponentCode().equals(((Class) aClass).getComponentCode());
         }
     }
-
 }

@@ -1,14 +1,13 @@
 package CoursePlanner.Model;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Offering {
     private final int semester;
     private final String location;
-    private List<String> instructors;
-    private List<Class> classes;
-
+    private final List<String> instructors;
+    private final List<Class> classes;
 
     public Offering(String[] courseDetails) {
         this.classes = new ArrayList<>();
@@ -48,7 +47,6 @@ public void merge(Offering offering) {
     }
     this.classes.addAll(classesToAdd);
 }
-
 
     public String getLocation() {
         return location;
