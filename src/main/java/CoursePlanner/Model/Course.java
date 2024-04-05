@@ -1,14 +1,14 @@
 package CoursePlanner.Model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Comparator;
 
 public class Course {
     private final String subject;
     private final String catalogNumber;
-    private List<Offering> offerings;
+    private final List<Offering> offerings;
 
     public Course(String[] courseDetails) {
         this.offerings = new ArrayList<>();
@@ -64,6 +64,19 @@ public class Course {
         } else {
             return Objects.equals(getSubject(), ((Course) course).getSubject()) &&
                     Objects.equals(getCatalogNumber(), ((Course) course).getCatalogNumber());
+        }
+    }
+
+    // Compare subjects first, and if subjects are equal, then compare catalog numbers
+    public static class CourseComparator implements Comparator<Course> {
+        @Override
+        public int compare(Course c1, Course c2) {
+            int subjectComparison = c1.getSubject().compareTo(c2.getSubject());
+            if (subjectComparison != 0) {
+                return subjectComparison;
+            } else {
+                return c1.getCatalogNumber().compareTo(c2.getCatalogNumber());
+            }
         }
     }
 }
