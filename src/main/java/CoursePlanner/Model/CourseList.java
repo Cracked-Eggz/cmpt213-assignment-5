@@ -84,7 +84,4 @@ public class CourseList {
             course.print();
         }
     }
-
-
-
 }

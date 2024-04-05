@@ -61,7 +61,7 @@ public void merge(Offering offering) {
     }
 
     public void print() {
-        System.out.println("    "+ semester + " in " + location + " by " + String.join(", ",instructors));
+        System.out.printf("%8s in %s by %s%n", semester, location, String.join(", ", instructors));
         assert !classes.isEmpty();
         for(Class aclass: classes) {
             aclass.print();

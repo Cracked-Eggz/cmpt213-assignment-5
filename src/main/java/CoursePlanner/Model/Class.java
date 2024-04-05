@@ -35,7 +35,7 @@ public class Class {
     }
 
     public void print() {
-        System.out.println("        Type=" + componentCode + ", Enrollment=" + enrollTotal + "/" + enrollCap);
+        System.out.printf("%8sType=%s, Enrollment=%d/%d%n", " ", componentCode, enrollTotal, enrollCap);
     }
 
     @Override
