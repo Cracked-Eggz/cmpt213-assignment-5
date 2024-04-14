@@ -12,13 +12,8 @@ public class Offering {
     private final List<Class> classes;
 
     public Offering(ArrayList<String> courseDetails) {
+        assert (courseDetails.size() == 8);
         this.classes = new ArrayList<>();
-        for (String dataCol : courseDetails) {
-            if (dataCol == null) {
-                System.out.print("Incorrect array size in Course(String[] courseDetails){...}");
-                System.exit(1); // abnormal status
-            }
-        }
 
         this.semester = new Semester(courseDetails.get(0));
         this.location = courseDetails.get(3);

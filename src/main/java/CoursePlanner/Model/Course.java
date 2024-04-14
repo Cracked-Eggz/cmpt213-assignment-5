@@ -11,13 +11,8 @@ public class Course {
     private final List<Offering> offerings;
 
     public Course(ArrayList<String> courseDetails) {
+        assert (courseDetails.size() == 8);
         this.offerings = new ArrayList<>();
-        for (String dataCol: courseDetails) {
-            if (dataCol == null) {
-                System.out.print("Incorrect array size passed in Course constructor");
-                System.exit(1); // abnormal status
-            }
-        }
 
         this.subject = courseDetails.get(1);
         this.catalogNumber = courseDetails.get(2);

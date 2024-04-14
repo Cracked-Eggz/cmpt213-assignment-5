@@ -19,6 +19,7 @@ public class CourseList {
             br.readLine(); // To skip reading the headers
             while ((courseStr = br.readLine()) != null) {
                 ArrayList<String> courseDetails = new CourseParser(courseStr).getCourseDetailsList();
+                assert (courseDetails.size() == 8);
                 Course newCourse = new Course(courseDetails);
 
                 boolean merged = false;
@@ -29,7 +30,7 @@ public class CourseList {
                         break;
                     }
                 }
-                if(!merged) {
+                if (!merged) {
                     courses.add(newCourse);
                 }
             }
