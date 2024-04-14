@@ -1,20 +1,22 @@
 package CoursePlanner.Model;
 
+import java.util.ArrayList;
+
 public class Class {
     private int enrollCap;
     private int enrollTotal;
     private final String componentCode;
 
-    public Class(String[] courseDetails) {
+    public Class(ArrayList<String> courseDetails) {
         for (String dataCol: courseDetails) {
             if (dataCol == null) {
                 System.out.print("Incorrect array size in Class(String[] courseDetails){...}");
                 System.exit(1); // abnormal status
             }
         }
-        this.enrollCap = Integer.parseInt(courseDetails[4]);
-        this.enrollTotal = Integer.parseInt(courseDetails[5]);
-        this.componentCode = courseDetails[7];
+        this.enrollCap = Integer.parseInt(courseDetails.get(5));
+        this.enrollTotal = Integer.parseInt(courseDetails.get(6));
+        this.componentCode = courseDetails.get(7);
     }
 
     public int getEnrollCap() {

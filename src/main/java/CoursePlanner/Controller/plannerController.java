@@ -19,4 +19,9 @@ public class plannerController {
         CourseList courseList = CourseList.hardCodedCreate();
         courseList.printAllCourses();
     }
+
+    @GetMapping("/api/department")
+    public ApiDepartmentDTO getDepartment() {
+        return new ApiDepartmentDTO();
+    }
 }

@@ -1,18 +1,18 @@
 package CoursePlanner.Model;
 
+import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.ArrayList;
 
 public class Offering {
-    private final int semester;
+    private final Semester semester;
     private final String location;
     private final List<String> instructors;
     private final List<Class> classes;
 
-    public Offering(String[] courseDetails) {
+    public Offering(ArrayList<String> courseDetails) {
         this.classes = new ArrayList<>();
-        this.instructors = new ArrayList<>();
         for (String dataCol : courseDetails) {
             if (dataCol == null) {
                 System.out.print("Incorrect array size in Course(String[] courseDetails){...}");
@@ -20,9 +20,9 @@ public class Offering {
             }
         }
 
-        this.semester = Integer.parseInt(courseDetails[0]);
-        this.location = courseDetails[3];
-        instructors.add(courseDetails[6]);
+        this.semester = new Semester(courseDetails.get(0));
+        this.location = courseDetails.get(3);
+        this.instructors = Arrays.asList(courseDetails.get(6).split(","));
         classes.add(new Class(courseDetails));
     }
 
@@ -51,7 +51,7 @@ public class Offering {
     }
 
     public int getSemester() {
-        return semester;
+        return semester.getAsInt();
     }
 
     public String getLocation() {
@@ -78,7 +78,7 @@ public class Offering {
     public boolean equals(Object offering) {
         if (!(offering instanceof Offering)) {
             return false;
-        } else if (semester != ((Offering) offering).getSemester()) {
+        } else if (semester.getAsInt() != ((Offering) offering).getSemester()) {
             return false;
         } else {
             return location.equals(((Offering) offering).getLocation());

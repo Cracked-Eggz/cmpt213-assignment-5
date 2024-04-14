@@ -2,15 +2,15 @@ package CoursePlanner.Model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class Course {
     private final String subject;
     private final String catalogNumber;
     private final List<Offering> offerings;
 
-    public Course(String[] courseDetails) {
+    public Course(ArrayList<String> courseDetails) {
         this.offerings = new ArrayList<>();
         for (String dataCol: courseDetails) {
             if (dataCol == null) {
@@ -18,8 +18,9 @@ public class Course {
                 System.exit(1); // abnormal status
             }
         }
-        this.subject = courseDetails[1];
-        this.catalogNumber = courseDetails[2];
+
+        this.subject = courseDetails.get(1);
+        this.catalogNumber = courseDetails.get(2);
         offerings.add(new Offering(courseDetails));
     }
 
@@ -63,8 +64,8 @@ public class Course {
         if (!(course instanceof Course)) {
             return false;
         } else {
-            return Objects.equals(getSubject(), ((Course) course).getSubject()) &&
-                    Objects.equals(getCatalogNumber(), ((Course) course).getCatalogNumber());
+            return Objects.equals(subject, ((Course) course).getSubject()) &&
+                    Objects.equals(catalogNumber, ((Course) course).getCatalogNumber());
         }
     }
 
