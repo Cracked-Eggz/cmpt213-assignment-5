@@ -1,6 +1,5 @@
 package CoursePlanner.Controller;
 
-import CoursePlanner.Model.Department;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +29,11 @@ public class plannerController {
         courseList.print();
     }
 
-    @GetMapping("/api/departments")
-    public List<Department> getDepartments(CourseList courseList) {
-        return courseList.getDepartments();
+    @GetMapping("/departments")
+    public List<ApiDepartmentDTO> getDepartments(CourseList courseList) {
+        return courseList.getDepartments().stream()
+                .map(ApiDepartmentDTO::new)
+                .toList();
     }
 
     @GetMapping("/departments/{deptId}/courses")
@@ -62,29 +63,29 @@ public class plannerController {
         return new ArrayList<>();
     }
 
-    @PostMapping("/api/addoffering")
+    @PostMapping("/addoffering")
     public ResponseEntity<String> addOffering(@RequestBody String newOfferingCSV, CourseList courseList) {
         courseList.addCourse(newOfferingCSV);
         return ResponseEntity.status(HttpStatus.CREATED).body("New offering added successfully.");
     }
 
-    @GetMapping("/api/watchers")
+    @GetMapping("/watchers")
     public List<ApiWatcherDTO> getWatchers(CourseList courseList) {
         return new ArrayList<>();
     }
 
-    @PostMapping("/api/watchers")
+    @PostMapping("/watchers")
     public ResponseEntity<String> addWatcher(@RequestBody ApiWatcherCreateDTO watcher, CourseList courseList) {
         return ResponseEntity.status(HttpStatus.CREATED).body("New offering added successfully.");
     }
 
-    @GetMapping("/api/watchers/{id}")
-    public ApiWatcherDTO getWatcher(@PathVariable int id, CourseList courseList) {
+    @GetMapping("/watchers/{watcherId}")
+    public ApiWatcherDTO getWatcher(@PathVariable int watcherId, CourseList courseList) {
         return new ApiWatcherDTO();
     }
 
-    @DeleteMapping("/api/watchers/{id}")
-    public ResponseEntity<String> deleteWatcher(@PathVariable int id, CourseList courseList) {
-        return ResponseEntity.status(HttpStatus.OK).body("Deleted offering with id " + id);
+    @DeleteMapping("/watchers/{watcherId}")
+    public ResponseEntity<String> deleteWatcher(@PathVariable int watcherId, CourseList courseList) {
+        return ResponseEntity.status(HttpStatus.OK).body("Deleted offering with id " + watcherId);
     }
 }
