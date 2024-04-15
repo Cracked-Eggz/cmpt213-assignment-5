@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 public class CourseList {
     private static final Logger logger = Logger.getLogger(CourseList.class.getName());
     // tree maps automatically maintain sorted order
-    private final TreeMap<String, Department> departments;
+    private TreeMap<String, Department> departments;
 
     public CourseList(String csvFileName) {
         this.departments = new TreeMap<>();
@@ -20,16 +20,7 @@ public class CourseList {
         try (BufferedReader br = new BufferedReader(new FileReader(csvFileName))) {
             br.readLine(); // To skip reading the headers
             while ((courseStr = br.readLine()) != null) {
-                ArrayList<String> courseDetails = new CourseDataParser(courseStr).getCourseDetailsList();
-                assert (courseDetails.size() == 8);
-                Course newCourse = new Course(courseDetails);
-
-                if (departments.get(newCourse.getDepartment()) == null) {
-                    departments.put(newCourse.getDepartment(), new Department(newCourse));
-                } else {
-                    Department courseDepartment = departments.get(newCourse.getDepartment());
-                    courseDepartment.addCourse(newCourse);
-                }
+                addCourse(courseStr);
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + csvFileName);
@@ -49,6 +40,19 @@ public class CourseList {
         // return new CourseList("data/small_data.csv");
         return new CourseList("data/course_data_2018.csv");
         // return new CourseList("data/course_data_2022.csv");
+    }
+
+    public void addCourse(String courseStr) {
+        ArrayList<String> courseDetails = new CourseDataParser(courseStr).getCourseDetailsList();
+        assert (courseDetails.size() == 8);
+        Course newCourse = new Course(courseDetails);
+
+        if (departments.get(newCourse.getDepartment()) == null) {
+            departments.put(newCourse.getDepartment(), new Department(newCourse));
+        } else {
+            Department courseDepartment = departments.get(newCourse.getDepartment());
+            courseDepartment.addCourse(newCourse);
+        }
     }
 
     public Department getDepartment(String name) {

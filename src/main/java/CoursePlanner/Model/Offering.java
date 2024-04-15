@@ -19,7 +19,7 @@ public class Offering {
         sections.add(new Section(courseDetails));
     }
 
-    public int getSemesterCode() {
+    public int getSemester() {
         return semester.getAsInt();
     }
 
@@ -75,7 +75,7 @@ public class Offering {
     public boolean equals(Object offering) {
         if (!(offering instanceof Offering)) {
             return false;
-        } else if (semester.getAsInt() != ((Offering) offering).getSemesterCode()) {
+        } else if (semester.getAsInt() != ((Offering) offering).getSemester()) {
             return false;
         } else {
             return location.equals(((Offering) offering).getLocation());

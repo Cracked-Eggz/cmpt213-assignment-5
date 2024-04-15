@@ -45,7 +45,7 @@ public class Course {
                 offerings.add(newOffering);
             }
         }
-        offerings.sort(Comparator.comparingInt(Offering::getSemesterCode));
+        offerings.sort(Comparator.comparingInt(Offering::getSemester));
     }
 
     public void print() {
