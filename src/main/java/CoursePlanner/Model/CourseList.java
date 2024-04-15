@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 public class CourseList {
     private static final Logger logger = Logger.getLogger(CourseList.class.getName());
     // tree maps automatically maintain sorted order
-    private TreeMap<String, Department> departments;
+    private final TreeMap<String, Department> departments;
 
     public CourseList(String csvFileName) {
         this.departments = new TreeMap<>();
