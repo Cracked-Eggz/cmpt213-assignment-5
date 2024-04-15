@@ -50,9 +50,41 @@ public class plannerController {
                 .toList();
     }
 
-        @PostMapping("/api/addoffering")
+    @GetMapping("/departments/{deptId}/courses/{courseId}/offerings/{offeringId}")
+    public ApiOfferingDataDTO getOfferingById(@PathVariable int deptId, @PathVariable int courseId,
+                                                              @PathVariable int offeringId, CourseList courseList) {
+
+        return new ApiOfferingDataDTO();
+    }
+
+    @GetMapping("/stats/students-per-semester?deptId={deptId}")
+    public List<ApiGraphDataPointDTO> studentsPerSemester(@PathVariable int deptId, CourseList courseList) {
+        return new ArrayList<>();
+    }
+
+    @PostMapping("/api/addoffering")
     public ResponseEntity<String> addOffering(@RequestBody String newOfferingCSV, CourseList courseList) {
         courseList.addCourse(newOfferingCSV);
         return ResponseEntity.status(HttpStatus.CREATED).body("New offering added successfully.");
+    }
+
+    @GetMapping("/api/watchers")
+    public List<ApiWatcherDTO> getWatchers(CourseList courseList) {
+        return new ArrayList<>();
+    }
+
+    @PostMapping("/api/watchers")
+    public ResponseEntity<String> addWatcher(@RequestBody ApiWatcherCreateDTO watcher, CourseList courseList) {
+        return ResponseEntity.status(HttpStatus.CREATED).body("New offering added successfully.");
+    }
+
+    @GetMapping("/api/watchers/{id}")
+    public ApiWatcherDTO getWatcher(@PathVariable int id, CourseList courseList) {
+        return new ApiWatcherDTO();
+    }
+
+    @DeleteMapping("/api/watchers/{id}")
+    public ResponseEntity<String> deleteWatcher(@PathVariable int id, CourseList courseList) {
+        return ResponseEntity.status(HttpStatus.OK).body("Deleted offering with id " + id);
     }
 }
