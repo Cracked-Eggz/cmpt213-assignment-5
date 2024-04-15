@@ -19,6 +19,9 @@ public class CourseList {
     private final TreeMap<String, Department> departments;
 
     public CourseList(String csvFileName) {
+        departmentIdCounter.set(1);
+        courseIdCounter.set(1);
+        offeringIdCounter.set(1);
         this.departments = new TreeMap<>();
 
         String courseStr;
