@@ -17,7 +17,7 @@ public class plannerController {
     @GetMapping("/dump-model")
     public void getDumpModel() {
         CourseList courseList = CourseList.hardCodedCreate();
-        courseList.printAllCourses();
+        courseList.print();
     }
 
     @GetMapping("/api/department")

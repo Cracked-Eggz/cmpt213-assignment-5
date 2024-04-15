@@ -2,10 +2,10 @@ package CoursePlanner.Model;
 
 import java.util.ArrayList;
 
-public class CourseParser {
+public class CourseDataParser {
     ArrayList<String> courseDetailsList;
 
-    public CourseParser(String courseDetailString) {
+    public CourseDataParser(String courseDetailString) {
         this.courseDetailsList = new ArrayList<>();
         StringBuilder currentToken = new StringBuilder();
 

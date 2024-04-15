@@ -1,40 +1,36 @@
 package CoursePlanner.Model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 public class CourseList {
-    List<Course> courses;
     private static final Logger logger = Logger.getLogger(CourseList.class.getName());
+    // tree maps automatically maintain sorted order
+    private TreeMap<String, Department> departments;
 
     public CourseList(String csvFileName) {
-        this.courses = new ArrayList<>();
+        this.departments = new TreeMap<>();
+
         String courseStr;
         try (BufferedReader br = new BufferedReader(new FileReader(csvFileName))) {
             br.readLine(); // To skip reading the headers
             while ((courseStr = br.readLine()) != null) {
-                ArrayList<String> courseDetails = new CourseParser(courseStr).getCourseDetailsList();
+                ArrayList<String> courseDetails = new CourseDataParser(courseStr).getCourseDetailsList();
                 assert (courseDetails.size() == 8);
                 Course newCourse = new Course(courseDetails);
 
-                boolean merged = false;
-                for (Course course : courses) {
-                    if (course.equals(newCourse)) {
-                        course.merge(newCourse);
-                        merged = true;
-                        break;
-                    }
-                }
-                if (!merged) {
-                    courses.add(newCourse);
+                if (departments.get(newCourse.getDepartment()) == null) {
+                    departments.put(newCourse.getDepartment(), new Department(newCourse));
+                } else {
+                    Department courseDepartment = departments.get(newCourse.getDepartment());
+                    courseDepartment.addCourse(newCourse);
                 }
             }
-            courses.sort(new Course.CourseComparator());
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + csvFileName);
             System.exit(1); // abnormal status
@@ -55,9 +51,11 @@ public class CourseList {
         // return new CourseList("data/course_data_2022.csv");
     }
 
-    public void printAllCourses() {
-        for (Course course : courses) {
-            course.print();
-        }
+    public Department getDepartment(String name) {
+        return departments.get(name);
+    }
+
+    public void print() {
+        departments.forEach((deptName, department) -> department.print());
     }
 }

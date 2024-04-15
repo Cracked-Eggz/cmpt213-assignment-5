@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.Objects;
 
 public class Course {
-    private final String subject;
+    private final String department;
     private final String catalogNumber;
     private final List<Offering> offerings;
 
@@ -14,13 +14,13 @@ public class Course {
         assert (courseDetails.size() == 8);
         this.offerings = new ArrayList<>();
 
-        this.subject = courseDetails.get(1);
+        this.department = courseDetails.get(1);
         this.catalogNumber = courseDetails.get(2);
         offerings.add(new Offering(courseDetails));
     }
 
-    public String getSubject() {
-        return subject;
+    public String getDepartment() {
+        return department;
     }
 
     public String getCatalogNumber() {
@@ -32,23 +32,24 @@ public class Course {
     }
 
     public void merge(Course course) {
-        List<Offering> offeringsToRemove = new ArrayList<>();
-
-        for (Offering offering : offerings) {
-            for (Offering newOffering : course.getOfferings()) {
+        for (Offering newOffering : course.getOfferings()) {
+            boolean merged = false;
+            for (Offering offering : offerings) {
                 if (offering.equals(newOffering)) {
                     offering.merge(newOffering);
-                    offeringsToRemove.add(newOffering);
+                    merged = true;
+                    break;
                 }
             }
+            if (!merged) {
+                offerings.add(newOffering);
+            }
         }
-        course.getOfferings().removeAll(offeringsToRemove);
-        offerings.addAll(course.getOfferings());
-        offerings.sort(Comparator.comparingInt(Offering::getSemester));
+        offerings.sort(Comparator.comparingInt(Offering::getSemesterCode));
     }
 
     public void print() {
-        System.out.println(subject + " " + catalogNumber);
+        System.out.println(department + " " + catalogNumber);
         for (Offering offering : offerings) {
             offering.print();
         }
@@ -59,7 +60,7 @@ public class Course {
         if (!(course instanceof Course)) {
             return false;
         } else {
-            return Objects.equals(subject, ((Course) course).getSubject()) &&
+            return Objects.equals(department, ((Course) course).getDepartment()) &&
                     Objects.equals(catalogNumber, ((Course) course).getCatalogNumber());
         }
     }
@@ -68,7 +69,7 @@ public class Course {
     public static class CourseComparator implements Comparator<Course> {
         @Override
         public int compare(Course c1, Course c2) {
-            int subjectComparison = c1.getSubject().compareTo(c2.getSubject());
+            int subjectComparison = c1.getDepartment().compareTo(c2.getDepartment());
             if (subjectComparison != 0) {
                 return subjectComparison;
             } else {

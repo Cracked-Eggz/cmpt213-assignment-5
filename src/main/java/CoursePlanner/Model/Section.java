@@ -2,16 +2,16 @@ package CoursePlanner.Model;
 
 import java.util.ArrayList;
 
-public class Class {
+public class Section {
     private int enrollCap;
     private int enrollTotal;
     private final String componentCode;
 
-    public Class(ArrayList<String> courseDetails) {
+    public Section(ArrayList<String> courseDetails) {
         assert (courseDetails.size() == 8);
 
-        this.enrollCap = Integer.parseInt(courseDetails.get(5));
-        this.enrollTotal = Integer.parseInt(courseDetails.get(6));
+        this.enrollCap = Integer.parseInt(courseDetails.get(4));
+        this.enrollTotal = Integer.parseInt(courseDetails.get(5));
         this.componentCode = courseDetails.get(7);
     }
 
@@ -27,9 +27,9 @@ public class Class {
         return componentCode;
     }
 
-    public void merge(Class aClass) {
-        this.enrollCap += aClass.getEnrollCap();
-        this.enrollTotal += aClass.getEnrollTotal();
+    public void merge(Section section) {
+        this.enrollCap += section.getEnrollCap();
+        this.enrollTotal += section.getEnrollTotal();
     }
 
     public void print() {
@@ -38,10 +38,10 @@ public class Class {
 
     @Override
     public boolean equals(Object aClass) {
-        if (!(aClass instanceof Class)) {
+        if (!(aClass instanceof Section)) {
             return false;
         } else {
-            return getComponentCode().equals(((Class) aClass).getComponentCode());
+            return getComponentCode().equals(((Section) aClass).getComponentCode());
         }
     }
 }

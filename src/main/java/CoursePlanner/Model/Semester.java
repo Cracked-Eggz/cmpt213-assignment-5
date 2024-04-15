@@ -2,12 +2,12 @@ package CoursePlanner.Model;
 
 public class Semester {
     private final String year;
-    private final String semester;
+    private final String term;
 
     public Semester(String termCode) {
         assert (termCode.length() == 4);
         this.year = termCode.substring(0, 3);
-        this.semester = termCode.substring(termCode.length() - 1);
+        this.term = termCode.substring(termCode.length() - 1);
     }
 
     // Ex. For semester XYZA:
@@ -21,8 +21,8 @@ public class Semester {
                 Integer.parseInt(year.substring(2));
     }
 
-    public String getSemester() {
-        return switch (semester) {
+    public String getTerm() {
+        return switch (term) {
             case "1" -> "Spring";
             case "4" -> "Summer";
             case "7" -> "Fall";
@@ -31,12 +31,12 @@ public class Semester {
     }
 
     public int getAsInt() {
-        String semsterString = year + semester;
+        String semsterString = year + term;
         return Integer.parseInt(semsterString);
     }
 
     @Override
     public String toString() {
-        return year + semester;
+        return year + term;
     }
 }

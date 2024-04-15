@@ -1,71 +1,73 @@
 package CoursePlanner.Model;
 
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Offering {
     private final Semester semester;
     private final String location;
-    private final List<String> instructors;
-    private final List<Class> classes;
+    private final Set<String> instructors;
+    private final List<Section> sections;
 
     public Offering(ArrayList<String> courseDetails) {
         assert (courseDetails.size() == 8);
-        this.classes = new ArrayList<>();
+        this.sections = new ArrayList<>();
 
         this.semester = new Semester(courseDetails.get(0));
         this.location = courseDetails.get(3);
-        this.instructors = Arrays.asList(courseDetails.get(6).split(","));
-        classes.add(new Class(courseDetails));
+        List<String> instructors = Arrays.asList(courseDetails.get(6).split(","));
+        this.instructors = new HashSet<>(instructors);
+        sections.add(new Section(courseDetails));
     }
 
-    public void merge(Offering offering) {
-        for (String instructor : offering.getInstructors()) {
-            if (!instructors.contains(instructor)) {
-                instructors.add(instructor);
-            }
-        }
-        List<Class> classesToAdd = new ArrayList<>();
-        for (Class newClass : offering.getClasses()) {
-            boolean exists = false;
-            for (Class aClass : classes) {
-                if (aClass.equals(newClass)) {
-                    aClass.merge(newClass);
-                    exists = true;
-                    break;
-                }
-            }
-            if (!exists) {
-                classesToAdd.add(newClass);
-            }
-        }
-        classes.addAll(classesToAdd);
-        classes.sort(Comparator.comparing(Class::getComponentCode));
-    }
-
-    public int getSemester() {
+    public int getSemesterCode() {
         return semester.getAsInt();
+    }
+
+    public int getYear() {
+        return semester.getYear();
+    }
+
+    public String getTerm() {
+        return semester.getTerm();
     }
 
     public String getLocation() {
         return location;
     }
 
-    public List<String> getInstructors() {
+    public Set<String> getInstructors() {
         return instructors;
     }
 
-    public List<Class> getClasses() {
-        return classes;
+    public List<Section> getSections() {
+        return sections;
+    }
+
+    public void merge(Offering offering) {
+        // sets automatically maintain uniqueness
+        instructors.addAll(offering.getInstructors());
+
+        for (Section newSection : offering.getSections()) {
+            boolean merged = false;
+            for (Section section : sections) {
+                if (section.equals(newSection)) {
+                    section.merge(newSection);
+                    merged = true;
+                    break;
+                }
+            }
+            if (!merged) {
+                sections.add(newSection);
+            }
+        }
+        sections.sort(Comparator.comparing(Section::getComponentCode));
     }
 
     public void print() {
         System.out.printf("%8s in %s by %s%n", semester, location, String.join(", ", instructors));
-        assert !classes.isEmpty();
-        for (Class aclass : classes) {
-            aclass.print();
+        assert !sections.isEmpty();
+        for (Section aSection : sections) {
+            aSection.print();
         }
     }
 
@@ -73,7 +75,7 @@ public class Offering {
     public boolean equals(Object offering) {
         if (!(offering instanceof Offering)) {
             return false;
-        } else if (semester.getAsInt() != ((Offering) offering).getSemester()) {
+        } else if (semester.getAsInt() != ((Offering) offering).getSemesterCode()) {
             return false;
         } else {
             return location.equals(((Offering) offering).getLocation());
