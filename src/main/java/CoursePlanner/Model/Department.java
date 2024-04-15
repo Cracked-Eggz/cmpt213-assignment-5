@@ -36,24 +36,25 @@ public class Department {
         return courses;
     }
 
-    public boolean addCourse(Course course) {
-        boolean merged = false;
+    public List<Boolean> addCourse(Course course) {
+        boolean courseMerged = false;
+        boolean offerMerged = false;
+
         for (Course aCourse : courses) {
             if (aCourse.equals(course)) {
-                aCourse.merge(course);
-                merged = true;
+                offerMerged = aCourse.merge(course);
+                courseMerged = true;
                 break;
             }
         }
-        if (!merged) {
+        if (!courseMerged) {
             courses.add(course);
         }
-        sort();
-        return merged;
-    }
-
-    public void sort() {
         courses.sort(new Course.CourseComparator());
+        List<Boolean> result = new ArrayList<>();
+        result.add(courseMerged);
+        result.add(offerMerged);
+        return result;
     }
 
     public void print() {

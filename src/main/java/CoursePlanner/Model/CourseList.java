@@ -58,10 +58,16 @@ public class CourseList {
                     new Department(departmentIdCounter.getAndIncrement(), newCourse.getDepartment(), newCourse));
         } else {
             Department courseDepartment = departments.get(newCourse.getDepartment());
-            if (courseDepartment.addCourse(newCourse)) {
+            List<Boolean> merged = courseDepartment.addCourse(newCourse);
+            Boolean courseMerged = merged.get(0);
+            Boolean offerMerged = merged.get(1);
+            if (courseMerged) {
                 // if the course was merged, then it is not a new course with unique id
                 courseIdCounter.decrementAndGet();
-                offeringIdCounter.decrementAndGet();
+                if (offerMerged) {
+                    // if the offering also merged, then it is not a new offering with unique id
+                    offeringIdCounter.decrementAndGet();
+                }
             }
         }
     }

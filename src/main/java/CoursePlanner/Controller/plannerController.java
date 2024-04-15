@@ -47,9 +47,11 @@ public class plannerController {
                 .toList();
     }
 
-    @GetMapping("/departments/{deptId}/courses/{courseId}/offer")
+    @GetMapping("/departments/{deptId}/courses/{courseId}/offerings")
     public List<ApiCourseOfferingDTO> getOfferInCourse(@PathVariable int deptId, @PathVariable int courseId,
                                                    CourseList courseList) {
+        System.out.println("courseId: " + courseId);
+        System.out.println(courseList.getDepartment(deptId).getCourse(courseId));
         return courseList.getDepartment(deptId).getCourse(courseId).getOfferings().stream()
                 .map(ApiCourseOfferingDTO::new)
                 .toList();

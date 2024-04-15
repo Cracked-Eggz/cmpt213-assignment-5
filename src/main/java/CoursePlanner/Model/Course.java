@@ -33,25 +33,37 @@ public class Course {
         return catalogNumber;
     }
 
+    public Offering getOffering(int id) {
+        for (Offering offering : offerings) {
+            if (offering.getOfferingId() == id) {
+                return offering;
+            }
+        }
+        return null;
+    }
+
     public List<Offering> getOfferings() {
         return offerings;
     }
 
-    public void merge(Course course) {
-        for (Offering newOffering : course.getOfferings()) {
-            boolean merged = false;
-            for (Offering offering : offerings) {
-                if (offering.equals(newOffering)) {
-                    offering.merge(newOffering);
-                    merged = true;
-                    break;
-                }
-            }
-            if (!merged) {
-                offerings.add(newOffering);
+    public boolean merge(Course course) {
+        // there is only one offering in the new course
+        Offering newOffering = course.getOfferings().get(0);
+
+        boolean merged = false;
+        for (Offering offering : offerings) {
+            if (offering.equals(newOffering)) {
+                offering.merge(newOffering);
+                merged = true;
+                break;
             }
         }
+        if (!merged) {
+            offerings.add(newOffering);
+        }
+
         offerings.sort(Comparator.comparingInt(Offering::getSemester));
+        return merged;
     }
 
     public void print() {
