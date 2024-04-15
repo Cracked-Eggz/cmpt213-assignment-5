@@ -4,18 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Department {
+    private final int deptId;
+    private final String name;
     List<Course> courses;
 
-    public Department(Course course) {
+    public Department(int id, String name, Course course) {
+        this.deptId = id;
+        this.name = name;
         courses = new ArrayList<>();
         courses.add(course);
+    }
+
+    public int getDeptId() {
+        return deptId;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public List<Course> getCourses() {
         return courses;
     }
 
-    public void addCourse(Course course) {
+    public boolean addCourse(Course course) {
         boolean merged = false;
         for (Course aCourse : courses) {
             if (aCourse.equals(course)) {
@@ -28,6 +40,7 @@ public class Department {
             courses.add(course);
         }
         sort();
+        return merged;
     }
 
     public void sort() {

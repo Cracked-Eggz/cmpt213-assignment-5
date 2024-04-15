@@ -6,17 +6,23 @@ import java.util.Comparator;
 import java.util.Objects;
 
 public class Course {
+    private final int courseId;
     private final String department;
     private final String catalogNumber;
     private final List<Offering> offerings;
 
-    public Course(ArrayList<String> courseDetails) {
+    public Course(int courseId, int offeringId, ArrayList<String> courseDetails) {
         assert (courseDetails.size() == 8);
+        this.courseId = courseId;
         this.offerings = new ArrayList<>();
 
         this.department = courseDetails.get(1);
         this.catalogNumber = courseDetails.get(2);
-        offerings.add(new Offering(courseDetails));
+        offerings.add(new Offering(offeringId, courseDetails));
+    }
+
+    public int getCourseId() {
+        return courseId;
     }
 
     public String getDepartment() {

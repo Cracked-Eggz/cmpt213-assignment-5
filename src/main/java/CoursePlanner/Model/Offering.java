@@ -3,13 +3,15 @@ package CoursePlanner.Model;
 import java.util.*;
 
 public class Offering {
+    private int offeringId;
     private final Semester semester;
     private final String location;
     private final Set<String> instructors;
     private final List<Section> sections;
 
-    public Offering(ArrayList<String> courseDetails) {
+    public Offering(int id, ArrayList<String> courseDetails) {
         assert (courseDetails.size() == 8);
+        this.offeringId = id;
         this.sections = new ArrayList<>();
 
         this.semester = new Semester(courseDetails.get(0));
@@ -17,6 +19,10 @@ public class Offering {
         List<String> instructors = Arrays.asList(courseDetails.get(6).split(","));
         this.instructors = new HashSet<>(instructors);
         sections.add(new Section(courseDetails));
+    }
+
+    public int getOfferingId() {
+        return offeringId;
     }
 
     public int getSemester() {
