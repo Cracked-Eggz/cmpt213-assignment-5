@@ -58,10 +58,11 @@ public class plannerController {
     }
 
     @GetMapping("/departments/{deptId}/courses/{courseId}/offerings/{offeringId}")
-    public ApiOfferingDataDTO getOfferingById(@PathVariable int deptId, @PathVariable int courseId,
+    public List<ApiOfferingSectionDTO> getOfferingById(@PathVariable int deptId, @PathVariable int courseId,
                                                               @PathVariable int offeringId, CourseList courseList) {
 
-        return new ApiOfferingDataDTO();
+        return courseList.getDepartment(deptId).getCourse(courseId).getOffering(offeringId).getSections().stream()
+                .map(ApiOfferingSectionDTO::new).toList();
     }
 
     @GetMapping("/stats/students-per-semester?deptId={deptId}")
