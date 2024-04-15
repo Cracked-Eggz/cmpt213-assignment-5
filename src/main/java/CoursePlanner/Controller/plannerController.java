@@ -2,6 +2,7 @@ package CoursePlanner.Controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import CoursePlanner.Model.CourseList;
@@ -15,7 +16,10 @@ import java.util.List;
 public class plannerController {
 
     @ModelAttribute("courseList")
-    public CourseList getCourseList() {
+    public CourseList getCourseList(Model model) {
+        if (model.containsAttribute("courseList")) {
+            return (CourseList) model.getAttribute("courseList");
+        }
         return CourseList.hardCodedCreate();
     }
 

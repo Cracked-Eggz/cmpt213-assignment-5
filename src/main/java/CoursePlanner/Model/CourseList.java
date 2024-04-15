@@ -11,17 +11,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 public class CourseList {
-    private static final Logger logger = Logger.getLogger(CourseList.class.getName());
-    private static final AtomicInteger departmentIdCounter = new AtomicInteger(1);
-    private static final AtomicInteger courseIdCounter = new AtomicInteger(1);
-    private static final AtomicInteger offeringIdCounter = new AtomicInteger(1);
+    private final AtomicInteger departmentIdCounter = new AtomicInteger(1);
+    private final AtomicInteger courseIdCounter = new AtomicInteger(1);
+    private final AtomicInteger offeringIdCounter = new AtomicInteger(1);
     // tree maps automatically maintain sorted order
     private final TreeMap<String, Department> departments;
 
     public CourseList(String csvFileName) {
-        departmentIdCounter.set(1);
-        courseIdCounter.set(1);
-        offeringIdCounter.set(1);
         this.departments = new TreeMap<>();
 
         String courseStr;
@@ -34,6 +30,7 @@ public class CourseList {
             System.out.println("File not found: " + csvFileName);
             System.exit(1); // abnormal status
         } catch (IOException e) {
+            Logger logger = Logger.getLogger(CourseList.class.getName());
             logger.severe("An unaccounted for error occurred: " + e.getMessage());
             logger.severe("Stack trace: ");
             for (StackTraceElement element : e.getStackTrace()) {
