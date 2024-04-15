@@ -9,4 +9,5 @@ public class ApiOfferingDataDTO {
     public int enrollmentTotal;
     public String instructor;
 
+    public ApiOfferingDataDTO() {}
 }

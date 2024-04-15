@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -15,7 +16,7 @@ public class CourseList {
     private static final AtomicInteger courseIdCounter = new AtomicInteger(1);
     private static final AtomicInteger offeringIdCounter = new AtomicInteger(1);
     // tree maps automatically maintain sorted order
-    private TreeMap<String, Department> departments;
+    private final TreeMap<String, Department> departments;
 
     public CourseList(String csvFileName) {
         this.departments = new TreeMap<>();
@@ -57,7 +58,7 @@ public class CourseList {
                     new Department(departmentIdCounter.getAndIncrement(), newCourse.getDepartment(), newCourse));
         } else {
             Department courseDepartment = departments.get(newCourse.getDepartment());
-            if (courseDepartment.addCourse(newCourse)){
+            if (courseDepartment.addCourse(newCourse)) {
                 // if the course was merged, then it is not a new course with unique id
                 courseIdCounter.decrementAndGet();
                 offeringIdCounter.decrementAndGet();
@@ -65,8 +66,17 @@ public class CourseList {
         }
     }
 
-    public Department getDepartment(String name) {
-        return departments.get(name);
+    public Department getDepartment(int deptId) {
+        for (Department department : departments.values()) {
+            if (department.getDeptId() == deptId) {
+                return department;
+            }
+        }
+        return null;
+    }
+
+    public List<Department> getDepartments() {
+        return new ArrayList<>(departments.values());
     }
 
     public void print() {

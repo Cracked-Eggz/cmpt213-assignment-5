@@ -23,6 +23,15 @@ public class Department {
         return name;
     }
 
+    public Course getCourse(int id) {
+        for (Course course : courses) {
+            if (course.getCourseId() == id) {
+                return course;
+            }
+        }
+        return null;
+    }
+
     public List<Course> getCourses() {
         return courses;
     }
