@@ -1,5 +1,6 @@
 package CoursePlanner.Controller;
 
+import CoursePlanner.Model.Department;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -9,6 +10,10 @@ import CoursePlanner.AllApiDtoClasses.*;
 import CoursePlanner.Model.CourseList;
 import CoursePlanner.Model.WatcherList;
 import CoursePlanner.Model.Watcher;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -104,7 +109,14 @@ public class plannerController {
 
     @GetMapping("/stats/students-per-semester?deptId={deptId}")
     public ResponseEntity<?> studentsPerSemester(@PathVariable int deptId, CourseList courseList) {
-        return ResponseEntity.ok().body("");
+        Department department = courseList.getDepartment(deptId);
+        Map<Integer, Integer> enrollmentTotals = department.getTotalEnrollmentPerSemester();
+        List<ApiGraphDataPointDTO> graphDataPoints = enrollmentTotals.entrySet().stream()
+                .map(entry -> new ApiGraphDataPointDTO(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+
+
+        return ResponseEntity.ok(graphDataPoints);
     }
 
     @PostMapping("/addoffering")

@@ -1,15 +1,15 @@
 package CoursePlanner.Model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Comparator;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Course {
     private final long courseId;
     private final String department;
     private final String catalogNumber;
     private final List<Offering> offerings;
+
+
 
     public Course(long courseId, long offeringId, ArrayList<String> courseDetails) {
         assert (courseDetails.size() == 8);
@@ -19,6 +19,14 @@ public class Course {
         this.department = courseDetails.get(1);
         this.catalogNumber = courseDetails.get(2);
         offerings.add(new Offering(offeringId, courseDetails));
+    }
+
+    public Map<Integer, Integer> getMapSemesterToEnrollmentNumbers() {
+        Map<Integer, Integer> mapSemesterToEnrollmentNumbers;
+        mapSemesterToEnrollmentNumbers = offerings.stream()
+                .collect(Collectors.groupingBy(Offering::getSemesterCode,
+                        Collectors.summingInt(Offering::getOfferingTotal)));
+        return mapSemesterToEnrollmentNumbers;
     }
 
     public long getCourseId() {

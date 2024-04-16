@@ -2,11 +2,25 @@ package CoursePlanner.Model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Department {
     private final long deptId;
     private final String name;
     List<Course> courses;
+
+    public Map<Integer, Integer> getTotalEnrollmentPerSemester() {
+        // Use TreeMap to automatically sort by semester code
+        Map<Integer, Integer> totalEnrollments = new TreeMap<>();
+        for (Course course : courses) {
+            Map<Integer, Integer> enrollments = course.getMapSemesterToEnrollmentNumbers();
+            for (Map.Entry<Integer, Integer> entry : enrollments.entrySet()) {
+                totalEnrollments.merge(entry.getKey(), entry.getValue(), Integer::sum);
+            }
+        }
+        return totalEnrollments;
+    }
 
     public Department(long id, String name, Course course) {
         this.deptId = id;

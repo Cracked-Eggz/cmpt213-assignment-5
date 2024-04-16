@@ -8,6 +8,7 @@ public class Offering {
     private final String location;
     private final Set<String> instructors;
     private final List<Section> sections;
+    private final int semesterCode;
 
     public Offering(long id, ArrayList<String> courseDetails) {
         assert (courseDetails.size() == 8);
@@ -19,8 +20,18 @@ public class Offering {
         List<String> instructors = Arrays.asList(courseDetails.get(6).split(","));
         this.instructors = new HashSet<>(instructors);
         sections.add(new Section(courseDetails));
+        this.semesterCode = Integer.parseInt(courseDetails.get(0));
     }
 
+    public int getOfferingTotal() {
+        return sections.stream()
+                .mapToInt(Section::getEnrollTotal)
+                .sum();
+    }
+
+    public int getSemesterCode() {
+        return semesterCode;
+    }
     public long getOfferingId() {
         return offeringId;
     }
