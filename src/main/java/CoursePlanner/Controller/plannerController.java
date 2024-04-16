@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import CoursePlanner.AllApiDtoClasses.*;
 import CoursePlanner.Model.CourseList;
 import CoursePlanner.Model.WatcherList;
+import CoursePlanner.Model.Watcher;
 
 @RestController
 @RequestMapping("/api")
@@ -107,14 +108,21 @@ public class plannerController {
     }
 
     @PostMapping("/addoffering")
-    public ResponseEntity<?> addOffering(@RequestBody ApiOfferingDataDTO newOffering, CourseList courseList) {
-        courseList.addCourse(newOffering);
+    public ResponseEntity<?> addOffering(@RequestBody ApiOfferingDataDTO newOffering,
+                                         CourseList courseList, WatcherList watcherList) {
+        Watcher watcher = watcherList.getWatcher(newOffering.subjectName, newOffering.catalogNumber);
+        if (watcher != null) {
+            watcher.addEvent(courseList.addCourse(newOffering));
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body("New offering added successfully.");
     }
 
     @GetMapping("/watchers")
     public ResponseEntity<?> getWatchers(WatcherList watcherList) {
-        return ResponseEntity.ok(watcherList.getWatchers());
+        return ResponseEntity.ok(watcherList.getWatchers().stream()
+                .map(ApiWatcherDTO::new)
+                .toList());
     }
 
     @PostMapping("/watchers")
@@ -131,7 +139,7 @@ public class plannerController {
                     .body("No watcher with ID: " + watcherId);
         }
 
-        return ResponseEntity.ok(watcherList.getWatcher(watcherId));
+        return ResponseEntity.ok(watcherList.getWatcher(watcherId).getEvents());
     }
 
     @DeleteMapping("/watchers/{watcherId}")

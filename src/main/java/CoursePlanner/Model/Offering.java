@@ -3,7 +3,7 @@ package CoursePlanner.Model;
 import java.util.*;
 
 public class Offering {
-    private long offeringId;
+    private final long offeringId;
     private final Semester semester;
     private final String location;
     private final Set<String> instructors;
@@ -43,6 +43,10 @@ public class Offering {
 
     public Set<String> getInstructors() {
         return instructors;
+    }
+
+    public Section getFirstSection() {
+        return sections.get(0);
     }
 
     public List<Section> getSections() {

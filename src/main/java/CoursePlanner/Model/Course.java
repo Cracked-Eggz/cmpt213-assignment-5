@@ -42,6 +42,10 @@ public class Course {
         return null;
     }
 
+    public Offering getFirstOffering() {
+        return offerings.get(0);
+    }
+
     public List<Offering> getOfferings() {
         return offerings;
     }

@@ -6,11 +6,13 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
+import java.util.Date;
 
 public class CourseList {
     private final AtomicLong departmentIdCounter = new AtomicLong(1);
@@ -18,6 +20,8 @@ public class CourseList {
     private final AtomicLong offeringIdCounter = new AtomicLong(1);
     // tree maps automatically maintain sorted order
     private final TreeMap<String, Department> departments;
+
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("[EEE MMM dd HH:mm:ss zzz yyyy]");
 
     public CourseList(String csvFileName) {
         this.departments = new TreeMap<>();
@@ -49,7 +53,7 @@ public class CourseList {
         // return new CourseList("data/course_data_2022.csv");
     }
 
-    public void addCourse(ApiOfferingDataDTO dataDTO) {
+    public String addCourse(ApiOfferingDataDTO dataDTO) {
         String result = dataDTO.semester + ", " +
                 dataDTO.subjectName + ", " +
                 dataDTO.catalogNumber + ", " +
@@ -58,10 +62,10 @@ public class CourseList {
                 dataDTO.enrollmentTotal + ", " +
                 dataDTO.instructor + ", " +
                 dataDTO.component;
-        addCourse(result);
+        return addCourse(result);
     }
 
-    public void addCourse(String courseStr) {
+    public String addCourse(String courseStr) {
         ArrayList<String> courseDetails = new CourseDataParser(courseStr).getCourseDetailsList();
         assert (courseDetails.size() == 8);
         Course newCourse = new Course(courseIdCounter.getAndIncrement(),
@@ -84,6 +88,23 @@ public class CourseList {
                 }
             }
         }
+
+        String formattedDate = dateFormat.format(new Date());
+        Offering offeringData = new Offering(0, courseDetails);
+        // return the course event for the watcher
+        return (
+                formattedDate +
+                ": Added section " +
+                        offeringData.getFirstSection().getComponentCode() +
+                " with enrollment (" +
+                        offeringData.getFirstSection().getEnrollTotal() +
+                        "/" +
+                        offeringData.getFirstSection().getEnrollCap() +
+                ") to offering " +
+                        offeringData.getTerm() +
+                        " " +
+                        offeringData.getYear()
+        );
     }
 
     public Department getDepartment(long deptId) {

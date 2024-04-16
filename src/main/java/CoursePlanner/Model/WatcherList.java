@@ -18,6 +18,15 @@ public class WatcherList {
         return null;
     }
 
+    public Watcher getWatcher(String department, String catalogNumber) {
+        for (Watcher watcher : watcherList) {
+            if (watcher.getDepartmentName().equals(department) && watcher.getCourseNumber().equals(catalogNumber)) {
+                return watcher;
+            }
+        }
+        return null;
+    }
+
     public boolean deleteWatcher(long id) {
         for (Watcher watcher : watcherList) {
             if (watcherIdCounter.get() == id) {

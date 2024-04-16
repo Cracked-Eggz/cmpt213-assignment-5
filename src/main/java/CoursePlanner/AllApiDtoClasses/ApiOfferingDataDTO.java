@@ -8,6 +8,4 @@ public class ApiOfferingDataDTO {
     public String component;
     public int enrollmentTotal;
     public String instructor;
-
-    public ApiOfferingDataDTO() {}
 }
