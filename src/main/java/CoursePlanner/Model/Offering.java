@@ -24,9 +24,12 @@ public class Offering {
     }
 
     public int getOfferingTotal() {
-        return sections.stream()
+         int totalOffering =  sections.stream()
                 .mapToInt(Section::getEnrollTotal)
                 .sum();
+
+         assert totalOffering == 0;
+         return totalOffering;
     }
 
     public int getSemesterCode() {

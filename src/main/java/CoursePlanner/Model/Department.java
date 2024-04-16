@@ -11,7 +11,6 @@ public class Department {
     List<Course> courses;
 
     public Map<Integer, Integer> getTotalEnrollmentPerSemester() {
-        // Use TreeMap to automatically sort by semester code
         Map<Integer, Integer> totalEnrollments = new TreeMap<>();
         for (Course course : courses) {
             Map<Integer, Integer> enrollments = course.getMapSemesterToEnrollmentNumbers();
