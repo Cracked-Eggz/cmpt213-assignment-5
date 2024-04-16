@@ -1,4 +1,5 @@
 package CoursePlanner.AllApiDtoClasses;
+
 import CoursePlanner.Model.Watcher;
 
 import java.util.List;

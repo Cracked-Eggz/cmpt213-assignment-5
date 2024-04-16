@@ -94,13 +94,13 @@ public class CourseList {
         // return the course event for the watcher
         return (
                 formattedDate +
-                ": Added section " +
+                        ": Added section " +
                         offeringData.getFirstSection().getComponentCode() +
-                " with enrollment (" +
+                        " with enrollment (" +
                         offeringData.getFirstSection().getEnrollTotal() +
                         "/" +
                         offeringData.getFirstSection().getEnrollCap() +
-                ") to offering " +
+                        ") to offering " +
                         offeringData.getTerm() +
                         " " +
                         offeringData.getYear()

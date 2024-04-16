@@ -1,4 +1,5 @@
 package CoursePlanner.AllApiDtoClasses;
+
 public class ApiOfferingDataDTO {
     public String semester;
     public String subjectName;

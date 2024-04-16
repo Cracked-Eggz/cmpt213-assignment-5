@@ -64,7 +64,7 @@ public class plannerController {
 
     @GetMapping("/departments/{deptId}/courses/{courseId}/offerings")
     public ResponseEntity<?> getOfferInCourse(@PathVariable int deptId, @PathVariable int courseId,
-                                                   CourseList courseList) {
+                                              CourseList courseList) {
         if (courseList.getDepartment(deptId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No department with ID: " + deptId);
@@ -80,7 +80,7 @@ public class plannerController {
 
     @GetMapping("/departments/{deptId}/courses/{courseId}/offerings/{offeringId}")
     public ResponseEntity<?> getOfferingById(@PathVariable int deptId, @PathVariable int courseId,
-                                                              @PathVariable int offeringId, CourseList courseList) {
+                                             @PathVariable int offeringId, CourseList courseList) {
         if (courseList.getDepartment(deptId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No department with ID: " + deptId);

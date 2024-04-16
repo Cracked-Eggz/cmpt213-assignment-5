@@ -4,11 +4,6 @@ public class Semester {
     private final String year;
     private final String term;
 
-    public Semester() {
-        this.year = "";
-        this.term = "";
-    }
-
     public Semester(String termCode) {
         assert (termCode.length() == 4);
         this.year = termCode.substring(0, 3);
