@@ -27,7 +27,6 @@ public class Offering {
         return sections.stream()
                 .mapToInt(Section::getEnrollTotal)
                 .sum();
-
     }
 
     public int getSemesterCode() {
