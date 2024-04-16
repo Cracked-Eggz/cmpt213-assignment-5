@@ -25,6 +25,7 @@ public class Offering {
 
     public int getOfferingTotal() {
         return sections.stream()
+                .filter(section -> "LEC".equals(section.getComponentCode()))
                 .mapToInt(Section::getEnrollTotal)
                 .sum();
     }
