@@ -10,17 +10,6 @@ public class Department {
     private final String name;
     List<Course> courses;
 
-    public Map<Integer, Integer> getTotalEnrollmentPerSemester() {
-        Map<Integer, Integer> totalEnrollments = new TreeMap<>();
-        for (Course course : courses) {
-            Map<Integer, Integer> enrollments = course.getMapSemesterToEnrollmentNumbers();
-            for (Map.Entry<Integer, Integer> entry : enrollments.entrySet()) {
-                totalEnrollments.merge(entry.getKey(), entry.getValue(), Integer::sum);
-            }
-        }
-        return totalEnrollments;
-    }
-
     public Department(long id, String name, Course course) {
         this.deptId = id;
         this.name = name;
@@ -68,6 +57,14 @@ public class Department {
         result.add(courseMerged);
         result.add(offerMerged);
         return result;
+    }
+
+    public Map<Integer, Integer> getTotalEnrollmentPerSemester() {
+        Map<Integer, Integer> totalEnrollments = new TreeMap<>();
+        for (Course course : courses) {
+            course.getTotalEnrollmentPerSemester(totalEnrollments);
+        }
+        return totalEnrollments;
     }
 
     public void print() {

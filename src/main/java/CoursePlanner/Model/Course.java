@@ -21,12 +21,21 @@ public class Course {
         offerings.add(new Offering(offeringId, courseDetails));
     }
 
-    public Map<Integer, Integer> getMapSemesterToEnrollmentNumbers() {
-        Map<Integer, Integer> mapSemesterToEnrollmentNumbers;
-        mapSemesterToEnrollmentNumbers = offerings.stream()
+    public void getTotalEnrollmentPerSemester(Map<Integer, Integer> totalEnrollments) {
+        Map<Integer, Integer> newEnrollments = offerings.stream()
                 .collect(Collectors.groupingBy(Offering::getSemesterCode,
                         Collectors.summingInt(Offering::getOfferingTotal)));
-        return mapSemesterToEnrollmentNumbers;
+
+        for (Map.Entry<Integer, Integer> entry : newEnrollments.entrySet()) {
+            int semesterCode = entry.getKey();
+            int newEnrollment = entry.getValue();
+
+            if (totalEnrollments.containsKey(semesterCode)) {
+                totalEnrollments.put(semesterCode, totalEnrollments.get(semesterCode) + newEnrollment);
+            } else {
+                totalEnrollments.put(semesterCode, newEnrollment);
+            }
+        }
     }
 
     public long getCourseId() {

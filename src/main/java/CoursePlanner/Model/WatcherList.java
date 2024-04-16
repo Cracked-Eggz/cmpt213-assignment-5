@@ -2,12 +2,21 @@ package CoursePlanner.Model;
 
 import CoursePlanner.AllApiDtoClasses.ApiWatcherCreateDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class WatcherList {
     private final AtomicLong watcherIdCounter = new AtomicLong(1);
     List<Watcher> watcherList;
+
+    public WatcherList() {
+        watcherList = new ArrayList<>();
+    }
+
+    public static WatcherList makeWatcherList() {
+        return new WatcherList();
+    }
 
     public Watcher getWatcher(long id) {
         for (Watcher watcher : watcherList) {
@@ -27,6 +36,15 @@ public class WatcherList {
         return null;
     }
 
+    public List<Watcher> getWatchers() {
+        return watcherList;
+    }
+
+    public void addWatcher(CourseList courseList, ApiWatcherCreateDTO newWatcher) {
+        Watcher watcher = new Watcher(watcherIdCounter.getAndIncrement(), courseList, newWatcher);
+        watcherList.add(watcher);
+    }
+
     public boolean deleteWatcher(long id) {
         for (Watcher watcher : watcherList) {
             if (watcherIdCounter.get() == id) {
@@ -35,14 +53,5 @@ public class WatcherList {
             }
         }
         return false;
-    }
-
-    public List<Watcher> getWatchers() {
-        return watcherList;
-    }
-
-    public void addWatcher(CourseList courseList, ApiWatcherCreateDTO newWatcher) {
-        Watcher watcher = new Watcher(watcherIdCounter.getAndIncrement(), courseList, newWatcher);
-        watcherList.add(watcher);
     }
 }
