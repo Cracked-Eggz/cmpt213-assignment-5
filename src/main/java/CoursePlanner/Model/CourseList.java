@@ -1,5 +1,7 @@
 package CoursePlanner.Model;
 
+import CoursePlanner.AllApiDtoClasses.ApiOfferingDataDTO;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -7,13 +9,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
 public class CourseList {
-    private final AtomicInteger departmentIdCounter = new AtomicInteger(1);
-    private final AtomicInteger courseIdCounter = new AtomicInteger(1);
-    private final AtomicInteger offeringIdCounter = new AtomicInteger(1);
+    private final AtomicLong departmentIdCounter = new AtomicLong(1);
+    private final AtomicLong courseIdCounter = new AtomicLong(1);
+    private final AtomicLong offeringIdCounter = new AtomicLong(1);
     // tree maps automatically maintain sorted order
     private final TreeMap<String, Department> departments;
 
@@ -47,6 +49,18 @@ public class CourseList {
         // return new CourseList("data/course_data_2022.csv");
     }
 
+    public void addCourse(ApiOfferingDataDTO dataDTO) {
+        String result = dataDTO.semester + ", " +
+                dataDTO.subjectName + ", " +
+                dataDTO.catalogNumber + ", " +
+                dataDTO.location + ", " +
+                dataDTO.enrollmentCap + ", " +
+                dataDTO.enrollmentTotal + ", " +
+                dataDTO.instructor + ", " +
+                dataDTO.component;
+        addCourse(result);
+    }
+
     public void addCourse(String courseStr) {
         ArrayList<String> courseDetails = new CourseDataParser(courseStr).getCourseDetailsList();
         assert (courseDetails.size() == 8);
@@ -72,7 +86,7 @@ public class CourseList {
         }
     }
 
-    public Department getDepartment(int deptId) {
+    public Department getDepartment(long deptId) {
         for (Department department : departments.values()) {
             if (department.getDeptId() == deptId) {
                 return department;

@@ -3,13 +3,13 @@ package CoursePlanner.Model;
 import java.util.*;
 
 public class Offering {
-    private int offeringId;
+    private long offeringId;
     private final Semester semester;
     private final String location;
     private final Set<String> instructors;
     private final List<Section> sections;
 
-    public Offering(int id, ArrayList<String> courseDetails) {
+    public Offering(long id, ArrayList<String> courseDetails) {
         assert (courseDetails.size() == 8);
         this.offeringId = id;
         this.sections = new ArrayList<>();
@@ -21,7 +21,7 @@ public class Offering {
         sections.add(new Section(courseDetails));
     }
 
-    public int getOfferingId() {
+    public long getOfferingId() {
         return offeringId;
     }
 

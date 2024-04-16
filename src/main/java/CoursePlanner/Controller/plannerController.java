@@ -5,11 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import CoursePlanner.Model.CourseList;
 import CoursePlanner.AllApiDtoClasses.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import CoursePlanner.Model.CourseList;
+import CoursePlanner.Model.WatcherList;
 
 @RestController
 @RequestMapping("/api")
@@ -23,9 +21,20 @@ public class plannerController {
         return CourseList.hardCodedCreate();
     }
 
+    @ModelAttribute("watcherList")
+    public WatcherList getWatcherList(Model model) {
+        if (model.containsAttribute("watcherList")) {
+            return (WatcherList) model.getAttribute("watcherList");
+        }
+        return new WatcherList();
+    }
+
     @GetMapping("/about")
-    public ApiAboutDTO getAbout() {
-        return new ApiAboutDTO("TheBestCoursePlannerEver", "Richard Xiong and Deng Chen");
+    public ResponseEntity<?> getAbout() {
+        return ResponseEntity.ok(new ApiAboutDTO(
+                "TheBestCoursePlannerEver",
+                "Richard Xiong and Deng Chen"
+        ));
     }
 
     @GetMapping("/dump-model")
@@ -34,65 +43,103 @@ public class plannerController {
     }
 
     @GetMapping("/departments")
-    public List<ApiDepartmentDTO> getDepartments(CourseList courseList) {
-        return courseList.getDepartments().stream()
+    public ResponseEntity<?> getDepartments(CourseList courseList) {
+        return ResponseEntity.ok(courseList.getDepartments().stream()
                 .map(ApiDepartmentDTO::new)
-                .toList();
+                .toList());
     }
 
     @GetMapping("/departments/{deptId}/courses")
-    public List<ApiCourseDTO> getCoursesInDepartment(@PathVariable int deptId, CourseList courseList) {
-        return courseList.getDepartment(deptId).getCourses().stream()
+    public ResponseEntity<?> getCoursesInDepartment(@PathVariable int deptId, CourseList courseList) {
+        if (courseList.getDepartment(deptId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No department with ID: " + deptId);
+        }
+
+        return ResponseEntity.ok(courseList.getDepartment(deptId).getCourses().stream()
                 .map(ApiCourseDTO::new)
-                .toList();
+                .toList());
     }
 
     @GetMapping("/departments/{deptId}/courses/{courseId}/offerings")
-    public List<ApiCourseOfferingDTO> getOfferInCourse(@PathVariable int deptId, @PathVariable int courseId,
+    public ResponseEntity<?> getOfferInCourse(@PathVariable int deptId, @PathVariable int courseId,
                                                    CourseList courseList) {
-        System.out.println("courseId: " + courseId);
-        System.out.println(courseList.getDepartment(deptId).getCourse(courseId));
-        return courseList.getDepartment(deptId).getCourse(courseId).getOfferings().stream()
+        if (courseList.getDepartment(deptId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No department with ID: " + deptId);
+        } else if (courseList.getDepartment(deptId).getCourse(courseId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No course with ID: " + courseId + " in department: " + deptId);
+        }
+
+        return ResponseEntity.ok(courseList.getDepartment(deptId).getCourse(courseId).getOfferings().stream()
                 .map(ApiCourseOfferingDTO::new)
-                .toList();
+                .toList());
     }
 
     @GetMapping("/departments/{deptId}/courses/{courseId}/offerings/{offeringId}")
-    public List<ApiOfferingSectionDTO> getOfferingById(@PathVariable int deptId, @PathVariable int courseId,
+    public ResponseEntity<?> getOfferingById(@PathVariable int deptId, @PathVariable int courseId,
                                                               @PathVariable int offeringId, CourseList courseList) {
+        if (courseList.getDepartment(deptId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No department with ID: " + deptId);
+        } else if (courseList.getDepartment(deptId).getCourse(courseId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No course with ID: " + courseId +
+                            " in department: " + deptId);
+        } else if (courseList.getDepartment(deptId).getCourse(courseId).getOffering(offeringId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No offering with ID: " + offeringId +
+                            " in course: " + courseId +
+                            " in department: " + deptId);
+        }
 
-        return courseList.getDepartment(deptId).getCourse(courseId).getOffering(offeringId).getSections().stream()
-                .map(ApiOfferingSectionDTO::new).toList();
+        return ResponseEntity.ok(courseList.getDepartment(deptId).getCourse(courseId)
+                .getOffering(offeringId).getSections()
+                .stream()
+                .map(ApiOfferingSectionDTO::new)
+                .toList());
     }
 
     @GetMapping("/stats/students-per-semester?deptId={deptId}")
-    public List<ApiGraphDataPointDTO> studentsPerSemester(@PathVariable int deptId, CourseList courseList) {
-        return new ArrayList<>();
+    public ResponseEntity<?> studentsPerSemester(@PathVariable int deptId, CourseList courseList) {
+        return ResponseEntity.ok().body("");
     }
 
     @PostMapping("/addoffering")
-    public ResponseEntity<String> addOffering(@RequestBody String newOfferingCSV, CourseList courseList) {
-        courseList.addCourse(newOfferingCSV);
+    public ResponseEntity<?> addOffering(@RequestBody ApiOfferingDataDTO newOffering, CourseList courseList) {
+        courseList.addCourse(newOffering);
         return ResponseEntity.status(HttpStatus.CREATED).body("New offering added successfully.");
     }
 
     @GetMapping("/watchers")
-    public List<ApiWatcherDTO> getWatchers(CourseList courseList) {
-        return new ArrayList<>();
+    public ResponseEntity<?> getWatchers(WatcherList watcherList) {
+        return ResponseEntity.ok(watcherList.getWatchers());
     }
 
     @PostMapping("/watchers")
-    public ResponseEntity<String> addWatcher(@RequestBody ApiWatcherCreateDTO watcher, CourseList courseList) {
+    public ResponseEntity<?> addWatcher(@RequestBody ApiWatcherCreateDTO watcher,
+                                        CourseList courseList, WatcherList watcherList) {
+        watcherList.addWatcher(courseList, watcher);
         return ResponseEntity.status(HttpStatus.CREATED).body("New offering added successfully.");
     }
 
     @GetMapping("/watchers/{watcherId}")
-    public ApiWatcherDTO getWatcher(@PathVariable int watcherId, CourseList courseList) {
-        return new ApiWatcherDTO();
+    public ResponseEntity<?> getWatcher(@PathVariable int watcherId, WatcherList watcherList) {
+        if (watcherList.getWatcher(watcherId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No watcher with ID: " + watcherId);
+        }
+
+        return ResponseEntity.ok(watcherList.getWatcher(watcherId));
     }
 
     @DeleteMapping("/watchers/{watcherId}")
-    public ResponseEntity<String> deleteWatcher(@PathVariable int watcherId, CourseList courseList) {
-        return ResponseEntity.status(HttpStatus.OK).body("Deleted offering with id " + watcherId);
+    public ResponseEntity<?> deleteWatcher(@PathVariable int watcherId, WatcherList watcherList) {
+        if (watcherList.deleteWatcher(watcherId)) {
+            return ResponseEntity.status(HttpStatus.OK).body("Deleted offering with id " + watcherId);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No watcher with ID: " + watcherId);
+        }
     }
 }

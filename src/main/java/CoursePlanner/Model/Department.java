@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Department {
-    private final int deptId;
+    private final long deptId;
     private final String name;
     List<Course> courses;
 
-    public Department(int id, String name, Course course) {
+    public Department(long id, String name, Course course) {
         this.deptId = id;
         this.name = name;
         courses = new ArrayList<>();
         courses.add(course);
     }
 
-    public int getDeptId() {
+    public long getDeptId() {
         return deptId;
     }
 
@@ -23,7 +23,7 @@ public class Department {
         return name;
     }
 
-    public Course getCourse(int id) {
+    public Course getCourse(long id) {
         for (Course course : courses) {
             if (course.getCourseId() == id) {
                 return course;

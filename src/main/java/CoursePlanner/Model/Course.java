@@ -6,12 +6,12 @@ import java.util.Comparator;
 import java.util.Objects;
 
 public class Course {
-    private final int courseId;
+    private final long courseId;
     private final String department;
     private final String catalogNumber;
     private final List<Offering> offerings;
 
-    public Course(int courseId, int offeringId, ArrayList<String> courseDetails) {
+    public Course(long courseId, long offeringId, ArrayList<String> courseDetails) {
         assert (courseDetails.size() == 8);
         this.courseId = courseId;
         this.offerings = new ArrayList<>();
@@ -21,7 +21,7 @@ public class Course {
         offerings.add(new Offering(offeringId, courseDetails));
     }
 
-    public int getCourseId() {
+    public long getCourseId() {
         return courseId;
     }
 
@@ -33,7 +33,7 @@ public class Course {
         return catalogNumber;
     }
 
-    public Offering getOffering(int id) {
+    public Offering getOffering(long id) {
         for (Offering offering : offerings) {
             if (offering.getOfferingId() == id) {
                 return offering;
