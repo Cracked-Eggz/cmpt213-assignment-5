@@ -107,14 +107,13 @@ public class plannerController {
                 .toList());
     }
 
-    @GetMapping("/stats/students-per-semester?deptId={deptId}")
-    public ResponseEntity<?> studentsPerSemester(@PathVariable int deptId, CourseList courseList) {
+    @GetMapping("/stats/students-per-semester")
+    public ResponseEntity<?> studentsPerSemester(@RequestParam int deptId, CourseList courseList) {
         Department department = courseList.getDepartment(deptId);
         Map<Integer, Integer> enrollmentTotals = department.getTotalEnrollmentPerSemester();
         List<ApiGraphDataPointDTO> graphDataPoints = enrollmentTotals.entrySet().stream()
                 .map(entry -> new ApiGraphDataPointDTO(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
-
 
         return ResponseEntity.ok(graphDataPoints);
     }
